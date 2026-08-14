@@ -1,30 +1,27 @@
 <!DOCTYPE html>
 <!--
   ============================================================================
-  PWG INTERMEDIADORA — Landing page institucional
+  PWG INTERMEDIADORA — Site institucional (estilo corporativo farmacêutico)
   Pharmedical · Waldhelm Moura · G3 Health Service
   ----------------------------------------------------------------------------
-  Stack: HTML5 + Tailwind CSS (Play CDN) + Vanilla JS. Arquivo único e autocontido.
-  Basta salvar como .html e abrir no navegador (ou publicar em qualquer host estático).
-  Link de acesso real da plataforma: https://app.pwgintermediadora.com.br/solicitar-acesso
+  Stack: HTML5 + Tailwind CSS (Play CDN) + Vanilla JS. Arquivo único.
+  Fotografia real embutida em /img (fonte: Openverse — imagens CC0 / domínio
+  público, sem exigência de atribuição). Plataforma: app.pwgintermediadora.com.br
   ============================================================================
 -->
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PWG Intermediadora — Medicamento de alto custo judicializado, rastreável e auditável</title>
-  <meta name="description" content="A PWG acompanha em tempo real o fornecimento de medicamentos de alto custo por ordem judicial, selando cada etapa em prova imutável — com o paciente protegido por padrão e relatórios prontos para TCE e Ministério Público." />
+  <title>PWG Intermediadora — Rastreabilidade e conformidade no medicamento judicializado</title>
+  <meta name="description" content="A PWG Intermediadora conecta gestão pública, jurídico e cadeia de fornecimento para acompanhar, comprovar e prestar contas do medicamento de alto custo por ordem judicial — com o paciente protegido por padrão." />
 
-  <!-- Tipografia: Plus Jakarta Sans (títulos) + Inter (texto) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 
-  <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Configuração do tema (paleta institucional saúde/setor público)
     tailwind.config = {
       theme: {
         extend: {
@@ -33,19 +30,20 @@
             display: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
           },
           colors: {
-            ink:   '#0A1A26', // navy mais profundo (fundos escuros)
-            navy:  '#0F2A3D', // azul institucional primário
-            navy2: '#16405A', // azul de apoio
-            teal:  '#12B5AE', // acento principal (saúde / "verde do semáforo")
-            tealDk:'#0E8F89', // acento hover
-            gold:  '#F5B841', // acento pontual (ressarcimento / atenção)
-            mist:  '#EAF4F4', // tom claro de fundo
-            slatey:'#5B7385', // texto secundário
+            ink:   '#0A1A26',
+            navy:  '#0F2A3D',
+            navy2: '#16405A',
+            teal:  '#12B5AE',
+            tealDk:'#0E8F89',
+            gold:  '#F5B841',
+            mist:  '#F1F6F7',
+            slatey:'#5B7385',
           },
           boxShadow: {
-            soft: '0 10px 40px -12px rgba(15, 42, 61, 0.18)',
-            card: '0 20px 50px -18px rgba(10, 26, 38, 0.28)',
+            soft: '0 10px 40px -14px rgba(15, 42, 61, 0.18)',
+            card: '0 24px 60px -22px rgba(10, 26, 38, 0.30)',
           },
+          maxWidth: { '8xl': '88rem' },
         },
       },
     };
@@ -54,790 +52,503 @@
   <style>
     html { scroll-behavior: smooth; }
     body { -webkit-font-smoothing: antialiased; }
-
-    /* Padrão de grade sutil para o fundo escuro do hero */
-    .grid-bg {
-      background-image:
-        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-      background-size: 44px 44px;
-    }
-    /* Halo de luz atrás do hero */
-    .glow { background: radial-gradient(60% 60% at 70% 30%, rgba(18,181,174,0.28), transparent 70%); }
-
-    /* Animação de entrada ao rolar (ativada por IntersectionObserver) */
-    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s ease; }
     .reveal.is-visible { opacity: 1; transform: none; }
-
-    /* Pulso do ponto de status "ao vivo" */
-    @keyframes ping-soft { 0% { box-shadow: 0 0 0 0 rgba(18,181,174,.6); } 70% { box-shadow: 0 0 0 10px rgba(18,181,174,0); } 100% { box-shadow: 0 0 0 0 rgba(18,181,174,0); } }
-    .live-dot { animation: ping-soft 2s infinite; }
-
-    /* Respeita quem prefere menos movimento */
+    /* Kicker/label corporativo com traço */
+    .kicker { letter-spacing: .12em; }
+    .kicker::before { content: ""; display:inline-block; width:26px; height:2px; background:currentColor; vertical-align:middle; margin-right:10px; opacity:.7; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .reveal { transition: none; opacity: 1; transform: none; }
-      .live-dot { animation: none; }
     }
   </style>
 </head>
 
-<body class="font-sans text-navy bg-white antialiased">
+<body class="font-sans text-navy bg-white antialiased" id="top">
 
-  <!-- =====================================================================
-       HEADER — navegação fixa + CTA
-  ====================================================================== -->
-  <header id="header" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8">
-      <nav class="flex items-center justify-between h-[70px]">
-        <!-- Logo -->
-        <a href="#top" class="flex items-center gap-3 group">
-          <span class="grid place-items-center w-10 h-10 rounded-xl bg-gradient-to-br from-teal to-navy2 text-white font-display font-extrabold text-lg shadow-soft">P</span>
+  <!-- ============ BARRA UTILITÁRIA (slim, topo) ============ -->
+  <div class="hidden md:block bg-ink text-white/70 text-xs">
+    <div class="max-w-8xl mx-auto px-6 lg:px-10 h-9 flex items-center justify-between">
+      <p>Plataforma para gestão pública de saúde, assistência farmacêutica e judicialização de alto custo</p>
+      <div class="flex items-center gap-5">
+        <span class="text-white/50">Pharmedical · Waldhelm Moura · G3 Health Service</span>
+        <a href="https://app.pwgintermediadora.com.br/solicitar-acesso" class="text-teal hover:text-white transition-colors font-semibold">Área restrita →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ HEADER ============ -->
+  <header id="header" class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-navy/10 transition-shadow">
+    <div class="max-w-8xl mx-auto px-6 lg:px-10">
+      <nav class="flex items-center justify-between h-[68px]">
+        <a href="#top" class="flex items-center gap-3">
+          <span class="grid place-items-center w-10 h-10 rounded-lg bg-gradient-to-br from-teal to-navy2 text-white font-display font-extrabold text-lg">P</span>
           <span class="leading-tight">
             <span class="block font-display font-extrabold text-[17px] tracking-tight text-navy">PWG <span class="text-teal">Intermediadora</span></span>
-            <span class="block text-[11px] font-medium text-slatey">Pharmedical · Waldhelm Moura · G3</span>
+            <span class="hidden sm:block text-[10.5px] font-medium text-slatey tracking-wide">SAÚDE · CONFORMIDADE · RASTREABILIDADE</span>
           </span>
         </a>
 
-        <!-- Menu desktop -->
         <ul class="hidden lg:flex items-center gap-8 text-sm font-medium text-navy/80">
-          <li><a href="#plataforma" class="hover:text-teal transition-colors">A Plataforma</a></li>
-          <li><a href="#como-funciona" class="hover:text-teal transition-colors">Como funciona</a></li>
-          <li><a href="#seguranca" class="hover:text-teal transition-colors">Segurança &amp; LGPD</a></li>
-          <li><a href="#conformidade" class="hover:text-teal transition-colors">Conformidade</a></li>
+          <li><a href="#atuacao" class="hover:text-teal transition-colors">O que fazemos</a></li>
+          <li><a href="#plataforma" class="hover:text-teal transition-colors">A plataforma</a></li>
+          <li><a href="#profissionais" class="hover:text-teal transition-colors">Para profissionais</a></li>
+          <li><a href="#consorcio" class="hover:text-teal transition-colors">O consórcio</a></li>
           <li><a href="#contato" class="hover:text-teal transition-colors">Contato</a></li>
         </ul>
 
-        <!-- CTA + hambúrguer -->
         <div class="flex items-center gap-3">
           <a href="https://app.pwgintermediadora.com.br/solicitar-acesso"
-             class="hidden sm:inline-flex items-center gap-2 rounded-xl bg-navy px-5 py-2.5 text-sm font-semibold text-white shadow-soft hover:bg-teal transition-colors">
-            Solicitar acesso
-            <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h9.19L9.72 6.03a.75.75 0 111.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 11-1.06-1.06l3.22-3.22H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>
+             class="hidden sm:inline-flex items-center gap-2 rounded-lg bg-navy px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal transition-colors">
+            Acessar plataforma
           </a>
-          <!-- Botão de menu mobile -->
           <button id="menuBtn" aria-label="Abrir menu" aria-expanded="false"
-                  class="lg:hidden grid place-items-center w-11 h-11 rounded-xl border border-navy/10 text-navy hover:bg-mist transition">
+                  class="lg:hidden grid place-items-center w-11 h-11 rounded-lg border border-navy/15 text-navy hover:bg-mist transition">
             <svg id="menuIconOpen" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
             <svg id="menuIconClose" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
           </button>
         </div>
       </nav>
     </div>
-
-    <!-- Menu mobile (dropdown) -->
-    <div id="mobileMenu" class="lg:hidden hidden bg-white/95 backdrop-blur border-t border-navy/10 shadow-soft">
-      <ul class="max-w-7xl mx-auto px-5 py-4 space-y-1 text-sm font-medium text-navy">
-        <li><a href="#plataforma" class="block py-3 px-2 rounded-lg hover:bg-mist">A Plataforma</a></li>
-        <li><a href="#como-funciona" class="block py-3 px-2 rounded-lg hover:bg-mist">Como funciona</a></li>
-        <li><a href="#seguranca" class="block py-3 px-2 rounded-lg hover:bg-mist">Segurança &amp; LGPD</a></li>
-        <li><a href="#conformidade" class="block py-3 px-2 rounded-lg hover:bg-mist">Conformidade</a></li>
+    <div id="mobileMenu" class="lg:hidden hidden bg-white border-t border-navy/10">
+      <ul class="max-w-8xl mx-auto px-6 py-4 space-y-1 text-sm font-medium text-navy">
+        <li><a href="#atuacao" class="block py-3 px-2 rounded-lg hover:bg-mist">O que fazemos</a></li>
+        <li><a href="#plataforma" class="block py-3 px-2 rounded-lg hover:bg-mist">A plataforma</a></li>
+        <li><a href="#profissionais" class="block py-3 px-2 rounded-lg hover:bg-mist">Para profissionais</a></li>
+        <li><a href="#consorcio" class="block py-3 px-2 rounded-lg hover:bg-mist">O consórcio</a></li>
         <li><a href="#contato" class="block py-3 px-2 rounded-lg hover:bg-mist">Contato</a></li>
-        <li class="pt-2"><a href="https://app.pwgintermediadora.com.br/solicitar-acesso" class="block text-center rounded-xl bg-navy px-5 py-3 font-semibold text-white">Solicitar acesso</a></li>
+        <li class="pt-2"><a href="https://app.pwgintermediadora.com.br/solicitar-acesso" class="block text-center rounded-lg bg-navy px-5 py-3 font-semibold text-white">Acessar plataforma</a></li>
       </ul>
     </div>
   </header>
 
-  <!-- =====================================================================
-       HERO
-  ====================================================================== -->
-  <section id="top" class="relative overflow-hidden bg-ink text-white">
-    <div class="absolute inset-0 grid-bg opacity-70"></div>
-    <div class="absolute inset-0 glow"></div>
-
-    <div class="relative max-w-7xl mx-auto px-5 sm:px-8 pt-32 pb-20 lg:pt-40 lg:pb-28">
-      <div class="grid lg:grid-cols-12 gap-12 items-center">
-
-        <!-- Texto do hero -->
-        <div class="lg:col-span-6">
-          <p class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-teal">
-            <span class="w-2 h-2 rounded-full bg-teal live-dot"></span>
-            O SISMEDEX dos casos judiciais
-          </p>
-
-          <h1 class="mt-6 font-display font-extrabold text-4xl sm:text-5xl lg:text-[3.4rem] leading-[1.06] tracking-tight">
-            Cada decisão judicial de saúde, um dossiê que se <span class="text-teal">comprova sozinho.</span>
-          </h1>
-
-          <p class="mt-6 text-lg text-white/75 max-w-xl leading-relaxed">
-            A PWG Intermediadora acompanha em tempo real o fornecimento de medicamentos de
-            alto custo por ordem judicial — selando cada etapa em prova imutável, com o
-            <strong class="text-white">paciente protegido por padrão</strong> e relatórios prontos para o TCE e o Ministério Público.
-          </p>
-
-          <div class="mt-9 flex flex-col sm:flex-row gap-4">
-            <a href="https://app.pwgintermediadora.com.br/solicitar-acesso"
-               class="inline-flex items-center justify-center gap-2 rounded-xl bg-teal px-7 py-4 font-semibold text-ink shadow-card hover:bg-white transition-colors">
-              Solicitar acesso
-              <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h9.19L9.72 6.03a.75.75 0 111.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 11-1.06-1.06l3.22-3.22H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>
-            </a>
-            <a href="#como-funciona"
-               class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 px-7 py-4 font-semibold text-white hover:bg-white/10 transition-colors">
-              Ver como funciona
-            </a>
-          </div>
-
-          <p class="mt-6 text-xs text-white/45">
-            Plataforma por convite, voltada a secretarias municipais e estaduais de saúde, procuradorias e controladorias.
-          </p>
-        </div>
-
-        <!-- Mock visual: mini "Centro de Comando" -->
-        <div class="lg:col-span-6 reveal">
-          <div class="relative mx-auto max-w-md">
-            <!-- cartão principal -->
-            <div class="rounded-2xl bg-white text-navy shadow-card overflow-hidden ring-1 ring-black/5">
-              <!-- barra superior -->
-              <div class="flex items-center justify-between px-5 py-3.5 bg-navy text-white">
-                <div class="flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 rounded-full bg-teal live-dot"></span>
-                  <span class="text-sm font-semibold">Centro de Comando</span>
-                </div>
-                <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-teal bg-teal/10 px-2.5 py-1 rounded-full">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                  Modo cego
-                </span>
-              </div>
-
-              <!-- corpo -->
-              <div class="p-5 space-y-4">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <p class="text-xs text-slatey">Processo</p>
-                    <p class="font-display font-bold text-lg">Caso #4471 · <span class="text-teal">Deferido</span></p>
-                  </div>
-                  <span class="grid place-items-center w-9 h-9 rounded-full bg-teal/15">
-                    <span class="w-3.5 h-3.5 rounded-full bg-teal"></span>
-                  </span>
-                </div>
-
-                <!-- identidade mascarada -->
-                <div class="flex items-center gap-3 rounded-xl bg-mist px-4 py-3">
-                  <svg class="w-5 h-5 text-navy2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm-8 0H6m12 0h-2m-6 8a6 6 0 0112 0"/></svg>
-                  <div class="text-sm">
-                    <p class="font-semibold">Paciente •••• •••• <span class="text-slatey font-normal">(cofre cifrado)</span></p>
-                    <p class="text-xs text-slatey">Identidade separada do processo</p>
-                  </div>
-                </div>
-
-                <!-- medicamento -->
-                <div class="text-sm">
-                  <p class="text-xs text-slatey mb-1">Medicamento</p>
-                  <p class="font-semibold">Trastuzumabe entansina 160&nbsp;mg</p>
-                </div>
-
-                <!-- esteira mini -->
-                <div>
-                  <div class="flex items-center justify-between text-xs text-slatey mb-2">
-                    <span>Esteira</span><span>etapa 9 de 14 · Logística</span>
-                  </div>
-                  <div class="flex items-center gap-1">
-                    <span class="h-1.5 flex-1 rounded-full bg-teal"></span>
-                    <span class="h-1.5 flex-1 rounded-full bg-teal"></span>
-                    <span class="h-1.5 flex-1 rounded-full bg-teal"></span>
-                    <span class="h-1.5 flex-1 rounded-full bg-teal"></span>
-                    <span class="h-1.5 flex-1 rounded-full bg-teal"></span>
-                    <span class="h-1.5 flex-1 rounded-full bg-teal"></span>
-                    <span class="h-1.5 flex-1 rounded-full bg-gold"></span>
-                    <span class="h-1.5 flex-1 rounded-full bg-navy/15"></span>
-                    <span class="h-1.5 flex-1 rounded-full bg-navy/15"></span>
-                    <span class="h-1.5 flex-1 rounded-full bg-navy/15"></span>
-                  </div>
-                </div>
-
-                <!-- chips de conformidade + hash -->
-                <div class="flex flex-wrap items-center gap-2 pt-1">
-                  <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-teal/12 text-tealDk">CID-10 ✓</span>
-                  <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-gold/15 text-[#9a6b00]">PCDT: fora da tabela</span>
-                  <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-navy/8 text-navy2">Em trânsito · Alfândega</span>
-                  <span class="ml-auto inline-flex items-center gap-1 text-[11px] font-mono text-slatey">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    sha256 9f2a…c1
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- selo flutuante -->
-            <div class="absolute -bottom-5 -left-4 hidden sm:flex items-center gap-2 rounded-xl bg-navy text-white px-4 py-3 shadow-card">
-              <svg class="w-5 h-5 text-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-              <span class="text-xs font-semibold leading-tight">Cadeia<br/>íntegra</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Faixa de credibilidade -->
-    <div class="relative border-t border-white/10 bg-ink/60">
-      <div class="max-w-7xl mx-auto px-5 sm:px-8 py-8 grid grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="reveal">
-          <p class="font-display font-extrabold text-3xl text-teal">14 etapas</p>
-          <p class="text-sm text-white/60 mt-1">da ordem judicial ao ressarcimento, rastreadas</p>
-        </div>
-        <div class="reveal">
-          <p class="font-display font-extrabold text-3xl text-teal">SHA-256</p>
-          <p class="text-sm text-white/60 mt-1">cada documento e evento selado por hash</p>
-        </div>
-        <div class="reveal">
-          <p class="font-display font-extrabold text-3xl text-teal">Modo cego</p>
-          <p class="text-sm text-white/60 mt-1">auditoria completa, exposição zero de PII</p>
-        </div>
-        <div class="reveal">
-          <p class="font-display font-extrabold text-3xl text-teal">Tema 1.234</p>
-          <p class="text-sm text-white/60 mt-1">pedido de ressarcimento estruturado no STF</p>
+  <!-- ============ HERO (foto full-bleed + overlay) ============ -->
+  <section class="relative">
+    <img src="img/hero.jpg" alt="Equipe de profissionais de saúde analisando um caso clínico" class="absolute inset-0 w-full h-full object-cover object-center" />
+    <div class="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/25"></div>
+    <div class="relative max-w-8xl mx-auto px-6 lg:px-10 py-28 lg:py-40">
+      <div class="max-w-2xl text-white">
+        <p class="kicker text-teal font-semibold text-sm uppercase">Saúde · Direito · Cadeia de fornecimento</p>
+        <h1 class="mt-6 font-display font-extrabold text-4xl sm:text-5xl lg:text-[3.5rem] leading-[1.05] tracking-tight">
+          Conectamos quem cuida, quem decide e quem fornece.
+        </h1>
+        <p class="mt-6 text-lg text-white/80 leading-relaxed max-w-xl">
+          A PWG Intermediadora acompanha, comprova e presta contas do medicamento de alto custo
+          fornecido por ordem judicial — unindo gestão pública, jurídico e cadeia farmacêutica numa
+          única trilha auditável, com o paciente protegido por padrão.
+        </p>
+        <div class="mt-9 flex flex-col sm:flex-row gap-4">
+          <a href="https://app.pwgintermediadora.com.br/solicitar-acesso"
+             class="inline-flex items-center justify-center gap-2 rounded-lg bg-teal px-7 py-4 font-semibold text-ink hover:bg-white transition-colors">
+            Acessar a plataforma
+            <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h9.19L9.72 6.03a.75.75 0 111.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 11-1.06-1.06l3.22-3.22H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>
+          </a>
+          <a href="#atuacao" class="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 px-7 py-4 font-semibold text-white hover:bg-white/10 transition-colors">
+            Conheça a atuação
+          </a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       BENEFÍCIOS / RECURSOS — 3 colunas (os 3 pilares)
-  ====================================================================== -->
-  <section id="plataforma" class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8">
-      <div class="max-w-2xl mb-16 reveal">
-        <p class="text-teal font-semibold text-sm tracking-wide uppercase">A plataforma</p>
-        <h2 class="mt-3 font-display font-extrabold text-3xl sm:text-4xl tracking-tight text-navy">
-          Três pilares que sustentam o processo judicializado
+  <!-- ============ FAIXA DE VALOR / INTRO ============ -->
+  <section class="bg-white border-b border-navy/10">
+    <div class="max-w-8xl mx-auto px-6 lg:px-10 py-16 lg:py-20 grid lg:grid-cols-12 gap-10 items-start reveal">
+      <div class="lg:col-span-5">
+        <p class="kicker text-teal font-semibold text-sm uppercase">Quem somos</p>
+        <h2 class="mt-4 font-display font-extrabold text-3xl lg:text-[2.5rem] leading-tight tracking-tight text-navy">
+          O elo confiável entre a decisão judicial e a entrega ao cidadão
         </h2>
-        <p class="mt-4 text-slatey text-lg">
-          O que o setor público precisa provar num caso de alto custo — que é lícito, que é
-          devido e que chegou ao cidadão — a PWG registra de ponta a ponta.
-        </p>
       </div>
-
-      <div class="grid md:grid-cols-3 gap-7">
-        <!-- Pilar 1 -->
-        <article class="reveal group rounded-2xl border border-navy/8 p-8 hover:shadow-card hover:-translate-y-1 transition-all bg-white">
-          <div class="grid place-items-center w-14 h-14 rounded-2xl bg-navy text-teal mb-6 group-hover:bg-teal group-hover:text-white transition-colors">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          </div>
-          <h3 class="font-display font-bold text-xl text-navy">Dossiê Imutável</h3>
-          <p class="mt-3 text-slatey leading-relaxed">
-            Um log encadeado por hash registra cada evento — cotação, empenho, entrega — em
-            ordem cronológica que não se reescreve. A prova documental que o gestor apresenta sem receio.
-          </p>
-        </article>
-
-        <!-- Pilar 2 -->
-        <article class="reveal group rounded-2xl border border-navy/8 p-8 hover:shadow-card hover:-translate-y-1 transition-all bg-white">
-          <div class="grid place-items-center w-14 h-14 rounded-2xl bg-navy text-teal mb-6 group-hover:bg-teal group-hover:text-white transition-colors">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
-          </div>
-          <h3 class="font-display font-bold text-xl text-navy">Parâmetros Oficiais</h3>
-          <p class="mt-3 text-slatey leading-relaxed">
-            Confronto com as referências do SUS: <strong class="text-navy">CID-10 × PCDT</strong> na clínica,
-            <strong class="text-navy">RENAME e CMED</strong> no financeiro. O que é padronizado — e o que o juiz
-            determinou fora da tabela — tudo documentado.
-          </p>
-        </article>
-
-        <!-- Pilar 3 -->
-        <article class="reveal group rounded-2xl border border-navy/8 p-8 hover:shadow-card hover:-translate-y-1 transition-all bg-white">
-          <div class="grid place-items-center w-14 h-14 rounded-2xl bg-navy text-teal mb-6 group-hover:bg-teal group-hover:text-white transition-colors">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-          </div>
-          <h3 class="font-display font-bold text-xl text-navy">Rastreio em Tempo Real</h3>
-          <p class="mt-3 text-slatey leading-relaxed">
-            Do empenho à mão do cidadão. Marcos de logística selados e status ao vivo da
-            transportadora, com deep-links oficiais de acompanhamento — inclusive de medicamento importado.
-          </p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- =====================================================================
-       COMO FUNCIONA — a esteira em 6 fases
-  ====================================================================== -->
-  <section id="como-funciona" class="py-24 bg-mist">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8">
-      <div class="max-w-2xl mb-16 reveal">
-        <p class="text-teal font-semibold text-sm tracking-wide uppercase">Como funciona</p>
-        <h2 class="mt-3 font-display font-extrabold text-3xl sm:text-4xl tracking-tight text-navy">
-          Da caneta do juiz à prestação de contas
-        </h2>
-        <p class="mt-4 text-slatey text-lg">
-          Uma esteira de 14 etapas, resumida em seis fases. Cada transição vira um evento
-          selado — nada acontece fora do dossiê.
+      <div class="lg:col-span-7">
+        <p class="text-lg text-slatey leading-relaxed">
+          Quando um paciente conquista na Justiça o direito a um medicamento de alto custo, o ente
+          público precisa executar com segurança jurídica, transparência e velocidade. A PWG organiza
+          esse processo de ponta a ponta: cada documento, prazo, cotação e entrega é registrado numa
+          trilha que se comprova sozinha — pronta para os órgãos de controle e blindada quanto aos
+          dados sensíveis do paciente.
         </p>
-      </div>
-
-      <ol class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Fase 1 -->
-        <li class="reveal rounded-2xl bg-white p-7 shadow-soft">
-          <span class="font-display font-extrabold text-teal text-sm">01</span>
-          <h3 class="mt-2 font-display font-bold text-lg text-navy">Ordem deferida</h3>
-          <p class="mt-2 text-sm text-slatey leading-relaxed">A decisão judicial é registrada e o caso é aberto, já vinculado ao processo e à tutela.</p>
-        </li>
-        <!-- Fase 2 -->
-        <li class="reveal rounded-2xl bg-white p-7 shadow-soft">
-          <span class="font-display font-extrabold text-teal text-sm">02</span>
-          <h3 class="mt-2 font-display font-bold text-lg text-navy">Habilitação &amp; Cofre</h3>
-          <p class="mt-2 text-sm text-slatey leading-relaxed">A identidade do paciente entra cifrada num cofre à parte. O processo segue sem expor PII.</p>
-        </li>
-        <!-- Fase 3 -->
-        <li class="reveal rounded-2xl bg-white p-7 shadow-soft">
-          <span class="font-display font-extrabold text-teal text-sm">03</span>
-          <h3 class="mt-2 font-display font-bold text-lg text-navy">Conformidade</h3>
-          <p class="mt-2 text-sm text-slatey leading-relaxed">Verificação clínica (CID-10 × PCDT) e financeira (RENAME/CMED). O parecer fica anexado ao dossiê.</p>
-        </li>
-        <!-- Fase 4 -->
-        <li class="reveal rounded-2xl bg-white p-7 shadow-soft">
-          <span class="font-display font-extrabold text-teal text-sm">04</span>
-          <h3 class="mt-2 font-display font-bold text-lg text-navy">Aquisição</h3>
-          <p class="mt-2 text-sm text-slatey leading-relaxed">Cotação, empenho e compra na operação da Pharmedical — com invoice e fornecedor rastreados.</p>
-        </li>
-        <!-- Fase 5 -->
-        <li class="reveal rounded-2xl bg-white p-7 shadow-soft">
-          <span class="font-display font-extrabold text-teal text-sm">05</span>
-          <h3 class="mt-2 font-display font-bold text-lg text-navy">Logística &amp; Dispensação</h3>
-          <p class="mt-2 text-sm text-slatey leading-relaxed">Rastreio em tempo real até a entrega, com marcos de transporte e alfândega selados no log.</p>
-        </li>
-        <!-- Fase 6 -->
-        <li class="reveal rounded-2xl bg-white p-7 shadow-soft border-2 border-teal/40">
-          <span class="font-display font-extrabold text-teal text-sm">06</span>
-          <h3 class="mt-2 font-display font-bold text-lg text-navy">Comprovação &amp; Ressarcimento</h3>
-          <p class="mt-2 text-sm text-slatey leading-relaxed">O dossiê fechado alimenta os relatórios de TCE e MP e estrutura o pedido de ressarcimento à União.</p>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- =====================================================================
-       SEGURANÇA & LGPD — o "Modo cego" (diferencial central)
-  ====================================================================== -->
-  <section id="seguranca" class="py-24 bg-ink text-white relative overflow-hidden">
-    <div class="absolute inset-0 grid-bg opacity-50"></div>
-    <div class="relative max-w-7xl mx-auto px-5 sm:px-8 grid lg:grid-cols-2 gap-16 items-center">
-      <div class="reveal">
-        <p class="text-teal font-semibold text-sm tracking-wide uppercase">Segurança &amp; LGPD</p>
-        <h2 class="mt-3 font-display font-extrabold text-3xl sm:text-4xl tracking-tight">
-          Auditoria completa. <span class="text-teal">Exposição zero.</span>
-        </h2>
-        <p class="mt-5 text-white/75 text-lg leading-relaxed">
-          Identidade e acontecimento vivem separados. O dossiê registra <em>“o caso #4471 teve a
-          cotação aprovada”</em> — nunca o CPF, o nome ou o laudo. Os dados sensíveis do paciente
-          ficam num cofre cifrado, acessível só com a chave do responsável.
-        </p>
-        <p class="mt-4 text-white/75 text-lg leading-relaxed">
-          Sem a chave, o sistema continua rodando e auditável: o TCE vê a esteira, os prazos e os
-          preços; jamais o paciente. É o direito ao esquecimento da LGPD convivendo com a trilha de
-          auditoria que o controle público exige.
-        </p>
-
-        <ul class="mt-8 space-y-4">
-          <li class="flex gap-3">
-            <svg class="w-6 h-6 shrink-0 text-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            <span class="text-white/85"><strong>Município controlador, Pharmedical operadora</strong> — arranjo pensado para a defesa na procuradoria.</span>
-          </li>
-          <li class="flex gap-3">
-            <svg class="w-6 h-6 shrink-0 text-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            <span class="text-white/85"><strong>Cofre de PII cifrado</strong>, separado do log por design — os dois não se enxergam.</span>
-          </li>
-          <li class="flex gap-3">
-            <svg class="w-6 h-6 shrink-0 text-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            <span class="text-white/85"><strong>Expurgo sem quebrar a prova</strong> — zera-se a identidade e a cadeia de hash segue íntegra.</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Cartão "aponta para os três lados" -->
-      <div class="reveal">
-        <div class="rounded-2xl bg-white/5 border border-white/10 p-8 backdrop-blur">
-          <div class="flex items-center gap-3 mb-6">
-            <span class="grid place-items-center w-11 h-11 rounded-xl bg-teal/15 text-teal">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-            </span>
-            <h3 class="font-display font-bold text-xl">O semáforo aponta para os três lados</h3>
+        <div class="mt-8 grid sm:grid-cols-3 gap-6">
+          <div>
+            <p class="font-display font-extrabold text-3xl text-navy">14</p>
+            <p class="text-sm text-slatey mt-1">etapas rastreadas, da ordem ao ressarcimento</p>
           </div>
-          <p class="text-white/70 leading-relaxed">
-            Um painel que só aponta para o cliente é propaganda. A PWG mostra o desempenho de
-            todos — Pharmedical, G3 e o próprio ente público. É o que faz o gestor confiar no que vê.
-          </p>
-
-          <div class="mt-7 grid grid-cols-3 gap-3 text-center">
-            <div class="rounded-xl bg-white/5 py-4">
-              <div class="mx-auto w-3.5 h-3.5 rounded-full bg-teal mb-2"></div>
-              <p class="text-xs font-semibold text-white/80">Ente público</p>
-            </div>
-            <div class="rounded-xl bg-white/5 py-4">
-              <div class="mx-auto w-3.5 h-3.5 rounded-full bg-gold mb-2"></div>
-              <p class="text-xs font-semibold text-white/80">Pharmedical</p>
-            </div>
-            <div class="rounded-xl bg-white/5 py-4">
-              <div class="mx-auto w-3.5 h-3.5 rounded-full bg-teal mb-2"></div>
-              <p class="text-xs font-semibold text-white/80">G3 Health</p>
-            </div>
+          <div>
+            <p class="font-display font-extrabold text-3xl text-navy">100%</p>
+            <p class="text-sm text-slatey mt-1">dos eventos selados por hash SHA-256</p>
+          </div>
+          <div>
+            <p class="font-display font-extrabold text-3xl text-navy">0</p>
+            <p class="text-sm text-slatey mt-1">exposição de dados do paciente na auditoria</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       CONFORMIDADE / PARA QUEM — relatórios TCE e MP + ressarcimento honesto
-  ====================================================================== -->
-  <section id="conformidade" class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8">
-      <div class="grid lg:grid-cols-2 gap-14 items-start">
-
-        <div class="reveal">
-          <p class="text-teal font-semibold text-sm tracking-wide uppercase">Conformidade &amp; prestação de contas</p>
-          <h2 class="mt-3 font-display font-extrabold text-3xl sm:text-4xl tracking-tight text-navy">
-            Feito para quem responde pela assistência farmacêutica
-          </h2>
-          <p class="mt-4 text-slatey text-lg leading-relaxed">
-            Secretarias municipais e estaduais de saúde, procuradorias e controladorias. A PWG
-            entrega, com um clique cada, dois relatórios prontos para os órgãos de controle.
-          </p>
-
-          <div class="mt-8 space-y-4">
-            <div class="flex gap-4 rounded-2xl border border-navy/8 p-5">
-              <span class="grid place-items-center w-12 h-12 rounded-xl bg-navy text-teal shrink-0">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
-              </span>
-              <div>
-                <h3 class="font-display font-bold text-navy">Relatório TCE — legalidade do gasto</h3>
-                <p class="text-sm text-slatey mt-1">Custo, referência CMED, invoice, faixa de ressarcimento e a cadeia de integridade verificada.</p>
-              </div>
-            </div>
-            <div class="flex gap-4 rounded-2xl border border-navy/8 p-5">
-              <span class="grid place-items-center w-12 h-12 rounded-xl bg-navy text-teal shrink-0">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m0-18l7 4-7 4m0 6a4 4 0 100-8"/></svg>
-              </span>
-              <div>
-                <h3 class="font-display font-bold text-navy">Relatório MP — direito do cidadão</h3>
-                <p class="text-sm text-slatey mt-1">Decisão e tutela estruturadas, conformidade clínica, parecer jurídico e cronologia dos eventos.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Ressarcimento honesto -->
-        <div class="reveal">
-          <div class="rounded-2xl bg-mist p-8 lg:p-10">
-            <span class="inline-flex items-center gap-2 rounded-full bg-gold/20 text-[#8a5e00] px-3.5 py-1.5 text-xs font-semibold">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              Sem promessa vazia
-            </span>
-            <h3 class="mt-5 font-display font-extrabold text-2xl text-navy">Ressarcimento estruturado no Tema 1.234 do STF</h3>
-            <p class="mt-4 text-slatey leading-relaxed">
-              A plataforma organiza o pedido de ressarcimento à União segundo as faixas do Tema
-              1.234 — <strong class="text-navy">federal, estadual ou oncológico</strong>. O percentual depende do custo
-              anual e do enquadramento de cada caso; a PWG monta o dossiê que <strong class="text-navy">sustenta o
-              pedido</strong>, não um número inflado.
-            </p>
-
-            <div class="mt-7 grid grid-cols-3 gap-3">
-              <div class="rounded-xl bg-white p-4 text-center shadow-soft">
-                <p class="font-display font-extrabold text-navy text-lg">Federal</p>
-                <p class="text-[11px] text-slatey mt-1">faixa de maior custo</p>
-              </div>
-              <div class="rounded-xl bg-white p-4 text-center shadow-soft">
-                <p class="font-display font-extrabold text-navy text-lg">Estadual</p>
-                <p class="text-[11px] text-slatey mt-1">faixa intermediária</p>
-              </div>
-              <div class="rounded-xl bg-white p-4 text-center shadow-soft">
-                <p class="font-display font-extrabold text-navy text-lg">Oncológico</p>
-                <p class="text-[11px] text-slatey mt-1">regra específica</p>
-              </div>
-            </div>
-            <p class="mt-5 text-xs text-slatey">
-              O enquadramento é calculado pelo motor da plataforma a partir do custo real do caso — nunca fixado à mão.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =====================================================================
-       DEPOIMENTOS
-       ATENÇÃO: conteúdo ILUSTRATIVO (a plataforma está em prospecção).
-       Substitua por depoimentos reais — com autorização — antes de publicar.
-  ====================================================================== -->
-  <section class="py-24 bg-mist">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8">
+  <!-- ============ O QUE FAZEMOS — cards com foto ============ -->
+  <section id="atuacao" class="py-24 bg-mist">
+    <div class="max-w-8xl mx-auto px-6 lg:px-10">
       <div class="max-w-2xl mb-14 reveal">
-        <p class="text-teal font-semibold text-sm tracking-wide uppercase">Depoimentos</p>
-        <h2 class="mt-3 font-display font-extrabold text-3xl sm:text-4xl tracking-tight text-navy">
-          O que muda para quem gere o processo
-        </h2>
-        <p class="mt-3 text-xs text-slatey">Cenários ilustrativos das dores que a plataforma resolve.</p>
+        <p class="kicker text-teal font-semibold text-sm uppercase">O que fazemos</p>
+        <h2 class="mt-4 font-display font-extrabold text-3xl lg:text-4xl tracking-tight text-navy">Três frentes, um único fluxo</h2>
+        <p class="mt-4 text-slatey text-lg">Da conformidade regulatória à comprovação da entrega, cada frente alimenta o mesmo dossiê.</p>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-6">
-        <!-- Depoimento 1 -->
-        <figure class="reveal rounded-2xl bg-white p-8 shadow-soft flex flex-col">
-          <div class="text-teal text-4xl font-display leading-none">“</div>
-          <blockquote class="mt-2 text-navy/90 leading-relaxed">
-            Pela primeira vez levei ao TCE um processo de alto custo com cada documento datado,
-            selado e na ordem certa. A auditoria durou minutos.
-          </blockquote>
-          <figcaption class="mt-6 flex items-center gap-3">
-            <span class="grid place-items-center w-11 h-11 rounded-full bg-navy text-teal font-display font-bold">CT</span>
-            <span class="text-sm">
-              <span class="block font-semibold text-navy">Controladoria Municipal</span>
-              <span class="block text-slatey">Gestão de contas</span>
-            </span>
-          </figcaption>
-        </figure>
-
-        <!-- Depoimento 2 -->
-        <figure class="reveal rounded-2xl bg-white p-8 shadow-soft flex flex-col">
-          <div class="text-teal text-4xl font-display leading-none">“</div>
-          <blockquote class="mt-2 text-navy/90 leading-relaxed">
-            O cofre resolveu meu receio com a LGPD. Consigo comprovar tudo aos órgãos de controle
-            sem expor o paciente em lugar nenhum.
-          </blockquote>
-          <figcaption class="mt-6 flex items-center gap-3">
-            <span class="grid place-items-center w-11 h-11 rounded-full bg-navy text-teal font-display font-bold">PG</span>
-            <span class="text-sm">
-              <span class="block font-semibold text-navy">Procuradoria do Município</span>
-              <span class="block text-slatey">Direito público</span>
-            </span>
-          </figcaption>
-        </figure>
-
-        <!-- Depoimento 3 -->
-        <figure class="reveal rounded-2xl bg-white p-8 shadow-soft flex flex-col">
-          <div class="text-teal text-4xl font-display leading-none">“</div>
-          <blockquote class="mt-2 text-navy/90 leading-relaxed">
-            Saber onde o medicamento importado está, em tempo real, mudou a conversa com o
-            paciente e com o juízo. Deixei de responder “estamos verificando”.
-          </blockquote>
-          <figcaption class="mt-6 flex items-center gap-3">
-            <span class="grid place-items-center w-11 h-11 rounded-full bg-navy text-teal font-display font-bold">AF</span>
-            <span class="text-sm">
-              <span class="block font-semibold text-navy">Assistência Farmacêutica</span>
-              <span class="block text-slatey">Secretaria de Saúde</span>
-            </span>
-          </figcaption>
-        </figure>
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <article class="reveal group bg-white rounded-2xl overflow-hidden shadow-soft hover:shadow-card transition-shadow">
+          <div class="aspect-[16/10] overflow-hidden">
+            <img src="img/conformidade.jpg" alt="Análise laboratorial de amostra clínica" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="p-7">
+            <h3 class="font-display font-bold text-xl text-navy">Conformidade clínica e financeira</h3>
+            <p class="mt-3 text-slatey leading-relaxed">Confronto com as referências do SUS — CID-10 × PCDT na clínica, RENAME e CMED no financeiro. O que é padronizado, e o que o juiz determinou fora da tabela.</p>
+          </div>
+        </article>
+        <!-- Card 2 -->
+        <article class="reveal group bg-white rounded-2xl overflow-hidden shadow-soft hover:shadow-card transition-shadow">
+          <div class="aspect-[16/10] overflow-hidden">
+            <img src="img/rastreio.jpg" alt="Estoque de medicamentos em centro de distribuição" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="p-7">
+            <h3 class="font-display font-bold text-xl text-navy">Rastreio até o paciente</h3>
+            <p class="mt-3 text-slatey leading-relaxed">Do empenho à dispensação, com marcos de logística selados e status ao vivo da cadeia — inclusive de medicamento importado sob controle alfandegário.</p>
+          </div>
+        </article>
+        <!-- Card 3 -->
+        <article class="reveal group bg-white rounded-2xl overflow-hidden shadow-soft hover:shadow-card transition-shadow">
+          <div class="aspect-[16/10] overflow-hidden">
+            <img src="img/consorcio.jpg" alt="Aperto de mãos entre profissionais em uma mesa de trabalho" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="p-7">
+            <h3 class="font-display font-bold text-xl text-navy">Prestação de contas</h3>
+            <p class="mt-3 text-slatey leading-relaxed">Relatórios prontos para TCE e Ministério Público, com a cadeia de integridade verificada e a base legal citada — e o pedido de ressarcimento à União estruturado.</p>
+          </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       CONTATO / CAPTURA DE LEADS
-  ====================================================================== -->
-  <section id="contato" class="py-24 bg-white">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8">
-      <div class="grid lg:grid-cols-2 gap-14 items-center">
-
-        <div class="reveal">
-          <p class="text-teal font-semibold text-sm tracking-wide uppercase">Contato</p>
-          <h2 class="mt-3 font-display font-extrabold text-3xl sm:text-4xl tracking-tight text-navy">
-            Vamos conversar sobre o seu caso judicializado
-          </h2>
-          <p class="mt-4 text-slatey text-lg leading-relaxed">
-            Conte para a gente o contexto do seu ente ou operação. Retornamos com uma
-            demonstração da esteira aplicada a um caso real.
-          </p>
-
-          <div class="mt-8 space-y-4 text-sm">
-            <a href="mailto:g3.representante@gmail.com" class="flex items-center gap-3 text-navy hover:text-teal transition-colors">
-              <span class="grid place-items-center w-10 h-10 rounded-xl bg-mist text-navy2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              </span>
-              g3.representante@gmail.com
-            </a>
-            <a href="https://app.pwgintermediadora.com.br/solicitar-acesso" class="flex items-center gap-3 text-navy hover:text-teal transition-colors">
-              <span class="grid place-items-center w-10 h-10 rounded-xl bg-mist text-navy2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2m-8-2a6 6 0 1112 0v3a3 3 0 01-3 3H9a3 3 0 01-3-3v-3z"/></svg>
-              </span>
-              pwgintermediadora.com.br/solicitar-acesso
-            </a>
+  <!-- ============ HISTÓRIA 1 — Plataforma (imagem + texto) ============ -->
+  <section id="plataforma" class="py-24 bg-white">
+    <div class="max-w-8xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-14 items-center">
+      <div class="reveal order-2 lg:order-1">
+        <p class="kicker text-teal font-semibold text-sm uppercase">A plataforma</p>
+        <h2 class="mt-4 font-display font-extrabold text-3xl lg:text-4xl tracking-tight text-navy leading-tight">
+          Um dossiê que se comprova sozinho
+        </h2>
+        <p class="mt-5 text-lg text-slatey leading-relaxed">
+          Cada acontecimento — cotação, empenho, entrega — vira um evento encadeado por hash, em
+          ordem cronológica que não se reescreve. O profissional acompanha tudo num painel único, do
+          deferimento à comprovação, e exporta a prova documental com um clique.
+        </p>
+        <ul class="mt-7 space-y-4">
+          <li class="flex gap-3"><svg class="w-6 h-6 shrink-0 text-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span class="text-navy/80"><strong class="text-navy">Log imutável</strong> — a cronologia dos fatos, selada por SHA-256.</span></li>
+          <li class="flex gap-3"><svg class="w-6 h-6 shrink-0 text-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span class="text-navy/80"><strong class="text-navy">Esteira de 14 etapas</strong> — status vivo de cada caso, sem planilha paralela.</span></li>
+          <li class="flex gap-3"><svg class="w-6 h-6 shrink-0 text-teal" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span class="text-navy/80"><strong class="text-navy">Exportação para controle</strong> — TCE e MP em relatórios prontos.</span></li>
+        </ul>
+        <a href="https://app.pwgintermediadora.com.br/solicitar-acesso" class="mt-8 inline-flex items-center gap-2 font-semibold text-navy hover:text-teal transition-colors">
+          Acessar a plataforma
+          <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h9.19L9.72 6.03a.75.75 0 111.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 11-1.06-1.06l3.22-3.22H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>
+        </a>
+      </div>
+      <div class="reveal order-1 lg:order-2">
+        <div class="relative">
+          <img src="img/plataforma.jpg" alt="Profissional consultando dados em um tablet" class="rounded-2xl shadow-card w-full aspect-[4/3] object-cover" loading="lazy" />
+          <!-- selo flutuante sobre a foto -->
+          <div class="absolute -bottom-5 -left-5 hidden sm:flex items-center gap-3 bg-white rounded-xl shadow-card px-5 py-4">
+            <span class="grid place-items-center w-10 h-10 rounded-lg bg-teal/12 text-tealDk">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </span>
+            <div class="text-sm leading-tight">
+              <p class="font-display font-bold text-navy">Cadeia íntegra</p>
+              <p class="text-slatey text-xs">verificação em tempo real</p>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
 
-        <!-- Formulário (funcional via mailto + validação/estado de sucesso) -->
-        <div class="reveal">
-          <form id="leadForm" novalidate class="rounded-2xl border border-navy/8 shadow-soft p-8 space-y-5 bg-white">
-            <div class="grid sm:grid-cols-2 gap-5">
-              <div>
-                <label for="nome" class="block text-sm font-medium text-navy mb-1.5">Nome</label>
-                <input id="nome" name="nome" type="text" required
-                       class="w-full rounded-xl border border-navy/15 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition" placeholder="Seu nome" />
-              </div>
-              <div>
-                <label for="email" class="block text-sm font-medium text-navy mb-1.5">E-mail institucional</label>
-                <input id="email" name="email" type="email" required
-                       class="w-full rounded-xl border border-navy/15 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition" placeholder="voce@orgao.gov.br" />
-              </div>
-            </div>
-            <div class="grid sm:grid-cols-2 gap-5">
-              <div>
-                <label for="orgao" class="block text-sm font-medium text-navy mb-1.5">Órgão / Instituição</label>
-                <input id="orgao" name="orgao" type="text"
-                       class="w-full rounded-xl border border-navy/15 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition" placeholder="Secretaria, procuradoria..." />
-              </div>
-              <div>
-                <label for="cargo" class="block text-sm font-medium text-navy mb-1.5">Cargo</label>
-                <input id="cargo" name="cargo" type="text"
-                       class="w-full rounded-xl border border-navy/15 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition" placeholder="Sua função" />
-              </div>
+  <!-- ============ HISTÓRIA 2 — Segurança / paciente ============ -->
+  <section id="seguranca" class="py-24 bg-ink text-white">
+    <div class="max-w-8xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-14 items-center">
+      <div class="reveal">
+        <img src="img/paciente.jpg" alt="Médico em atendimento a uma paciente" class="rounded-2xl shadow-card w-full aspect-[4/3] object-cover" loading="lazy" />
+      </div>
+      <div class="reveal">
+        <p class="kicker text-teal font-semibold text-sm uppercase">Segurança &amp; LGPD</p>
+        <h2 class="mt-4 font-display font-extrabold text-3xl lg:text-4xl tracking-tight leading-tight">
+          Auditoria completa. Exposição zero.
+        </h2>
+        <p class="mt-5 text-lg text-white/75 leading-relaxed">
+          Identidade e acontecimento vivem separados. O dossiê registra <em>“o caso teve a cotação
+          aprovada”</em> — nunca o CPF, o nome ou o laudo. Os dados sensíveis do paciente ficam num
+          cofre cifrado, acessível só com a chave do responsável.
+        </p>
+        <p class="mt-4 text-lg text-white/75 leading-relaxed">
+          Sem a chave, o sistema continua auditável: o controle público vê a esteira, os prazos e os
+          preços; jamais o paciente. É o direito ao esquecimento da LGPD convivendo com a trilha de
+          auditoria que o setor público exige.
+        </p>
+        <div class="mt-8 grid sm:grid-cols-2 gap-4">
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <p class="font-semibold text-white">Município controlador</p>
+            <p class="text-sm text-white/60 mt-1">Pharmedical como operadora — arranjo defensável na procuradoria.</p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <p class="font-semibold text-white">Cofre de PII cifrado</p>
+            <p class="text-sm text-white/60 mt-1">Separado do log por design — expurgo sem quebrar a prova.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PARA PROFISSIONAIS ============ -->
+  <section id="profissionais" class="py-24 bg-white">
+    <div class="max-w-8xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-14 items-center">
+      <div class="reveal order-2 lg:order-1">
+        <p class="kicker text-teal font-semibold text-sm uppercase">Para profissionais</p>
+        <h2 class="mt-4 font-display font-extrabold text-3xl lg:text-4xl tracking-tight text-navy leading-tight">
+          Uma linguagem comum entre áreas que não costumam se falar
+        </h2>
+        <p class="mt-5 text-lg text-slatey leading-relaxed">
+          Gestor de assistência farmacêutica, procurador, controlador interno, farmacêutico e a cadeia
+          de fornecimento passam a trabalhar sobre o mesmo caso, com os mesmos termos do SUS
+          (LME, PCDT, RENAME, CMED) e a mesma fonte da verdade.
+        </p>
+        <div class="mt-8 grid sm:grid-cols-2 gap-x-8 gap-y-5">
+          <div class="flex gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-teal shrink-0"></span><p class="text-navy/80"><strong class="text-navy">Gestores de saúde</strong> — visão do caso e dos prazos em tempo real.</p></div>
+          <div class="flex gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-teal shrink-0"></span><p class="text-navy/80"><strong class="text-navy">Procuradorias</strong> — dossiê que sustenta a defesa e o ressarcimento.</p></div>
+          <div class="flex gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-teal shrink-0"></span><p class="text-navy/80"><strong class="text-navy">Controle interno</strong> — trilha verificável, sem retrabalho.</p></div>
+          <div class="flex gap-3"><span class="mt-1 w-2 h-2 rounded-full bg-teal shrink-0"></span><p class="text-navy/80"><strong class="text-navy">Cadeia farmacêutica</strong> — cotação, aquisição e entrega documentadas.</p></div>
+        </div>
+      </div>
+      <div class="reveal order-1 lg:order-2">
+        <img src="img/profissionais.jpg" alt="Profissionais reunidos em uma mesa de trabalho" class="rounded-2xl shadow-card w-full aspect-[4/3] object-cover" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAIXA DE NÚMEROS ============ -->
+  <section class="py-16 bg-navy text-white">
+    <div class="max-w-8xl mx-auto px-6 lg:px-10 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center reveal">
+      <div><p class="font-display font-extrabold text-4xl text-teal">14</p><p class="text-sm text-white/70 mt-2">etapas da esteira</p></div>
+      <div><p class="font-display font-extrabold text-4xl text-teal">SHA-256</p><p class="text-sm text-white/70 mt-2">em cada evento</p></div>
+      <div><p class="font-display font-extrabold text-4xl text-teal">2</p><p class="text-sm text-white/70 mt-2">relatórios de controle (TCE e MP)</p></div>
+      <div><p class="font-display font-extrabold text-4xl text-teal">Tema 1.234</p><p class="text-sm text-white/70 mt-2">ressarcimento estruturado no STF</p></div>
+    </div>
+  </section>
+
+  <!-- ============ RESSARCIMENTO (honesto) ============ -->
+  <section class="py-24 bg-white">
+    <div class="max-w-8xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-14 items-center">
+      <div class="reveal">
+        <img src="img/medicamento.jpg" alt="Medicamentos diversos" class="rounded-2xl shadow-card w-full aspect-[4/3] object-cover" loading="lazy" />
+      </div>
+      <div class="reveal">
+        <span class="inline-flex items-center gap-2 rounded-full bg-gold/20 text-[#8a5e00] px-3.5 py-1.5 text-xs font-semibold">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Sem promessa vazia
+        </span>
+        <h2 class="mt-5 font-display font-extrabold text-3xl lg:text-4xl tracking-tight text-navy leading-tight">Ressarcimento estruturado no Tema 1.234 do STF</h2>
+        <p class="mt-5 text-lg text-slatey leading-relaxed">
+          A plataforma organiza o pedido de ressarcimento à União segundo as faixas do Tema 1.234 —
+          <strong class="text-navy">federal, estadual ou oncológico</strong>. O percentual depende do custo anual e do
+          enquadramento de cada caso; a PWG monta o dossiê que <strong class="text-navy">sustenta o pedido</strong>, não um
+          número inflado.
+        </p>
+        <div class="mt-7 grid grid-cols-3 gap-3">
+          <div class="rounded-xl bg-mist p-4 text-center"><p class="font-display font-extrabold text-navy">Federal</p><p class="text-[11px] text-slatey mt-1">maior custo</p></div>
+          <div class="rounded-xl bg-mist p-4 text-center"><p class="font-display font-extrabold text-navy">Estadual</p><p class="text-[11px] text-slatey mt-1">faixa intermediária</p></div>
+          <div class="rounded-xl bg-mist p-4 text-center"><p class="font-display font-extrabold text-navy">Oncológico</p><p class="text-[11px] text-slatey mt-1">regra específica</p></div>
+        </div>
+        <p class="mt-5 text-xs text-slatey">O enquadramento é calculado pelo motor da plataforma a partir do custo real do caso — nunca fixado à mão.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONSÓRCIO ============ -->
+  <section id="consorcio" class="py-24 bg-mist">
+    <div class="max-w-8xl mx-auto px-6 lg:px-10">
+      <div class="max-w-2xl mb-14 reveal">
+        <p class="kicker text-teal font-semibold text-sm uppercase">O consórcio</p>
+        <h2 class="mt-4 font-display font-extrabold text-3xl lg:text-4xl tracking-tight text-navy">Três competências, uma responsabilidade</h2>
+        <p class="mt-4 text-slatey text-lg">A PWG reúne operação farmacêutica, jurídico de direito público e relacionamento com a gestão — cada parte respondendo pelo que faz melhor.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="reveal bg-white rounded-2xl p-8 shadow-soft">
+          <span class="grid place-items-center w-12 h-12 rounded-xl bg-navy text-teal mb-5"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg></span>
+          <h3 class="font-display font-bold text-xl text-navy">Pharmedical</h3>
+          <p class="mt-1 text-sm font-semibold text-teal">Intermediação e operação</p>
+          <p class="mt-3 text-slatey leading-relaxed">Cotação, aquisição e logística do medicamento, na lógica de um PBM voltado ao setor público.</p>
+        </div>
+        <div class="reveal bg-white rounded-2xl p-8 shadow-soft">
+          <span class="grid place-items-center w-12 h-12 rounded-xl bg-navy text-teal mb-5"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l9-4 9 4v6c0 5-3.8 8.5-9 10-5.2-1.5-9-5-9-10V6z"/></svg></span>
+          <h3 class="font-display font-bold text-xl text-navy">Waldhelm Moura</h3>
+          <p class="mt-1 text-sm font-semibold text-teal">Jurídico / direito público</p>
+          <p class="mt-3 text-slatey leading-relaxed">Fundamentação, pareceres e a estratégia de ressarcimento com base na jurisprudência aplicável.</p>
+        </div>
+        <div class="reveal bg-white rounded-2xl p-8 shadow-soft">
+          <span class="grid place-items-center w-12 h-12 rounded-xl bg-navy text-teal mb-5"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a4 4 0 10-3-6.65"/></svg></span>
+          <h3 class="font-display font-bold text-xl text-navy">G3 Health Service</h3>
+          <p class="mt-1 text-sm font-semibold text-teal">Relacionamento comercial</p>
+          <p class="mt-3 text-slatey leading-relaxed">A ponte com gestores e secretarias, e o acompanhamento próximo de cada ente parceiro.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA + Contato ============ -->
+  <section id="contato" class="py-24 bg-white">
+    <div class="max-w-8xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-14 items-center">
+      <div class="reveal">
+        <p class="kicker text-teal font-semibold text-sm uppercase">Fale com a PWG</p>
+        <h2 class="mt-4 font-display font-extrabold text-3xl lg:text-4xl tracking-tight text-navy leading-tight">
+          Leve a rastreabilidade ao seu ente
+        </h2>
+        <p class="mt-5 text-lg text-slatey leading-relaxed">
+          Conte o contexto da sua secretaria, procuradoria ou operação. Retornamos com uma
+          demonstração da esteira aplicada a um caso real.
+        </p>
+        <div class="mt-8 space-y-4 text-sm">
+          <a href="mailto:g3.representante@gmail.com" class="flex items-center gap-3 text-navy hover:text-teal transition-colors">
+            <span class="grid place-items-center w-10 h-10 rounded-lg bg-mist text-navy2"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></span>
+            g3.representante@gmail.com
+          </a>
+          <a href="https://app.pwgintermediadora.com.br/solicitar-acesso" class="flex items-center gap-3 text-navy hover:text-teal transition-colors">
+            <span class="grid place-items-center w-10 h-10 rounded-lg bg-mist text-navy2"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0-1.105.895-2 2-2s2 .895 2 2-.895 2-2 2m-8-2a6 6 0 1112 0v3a3 3 0 01-3 3H9a3 3 0 01-3-3v-3z"/></svg></span>
+            app.pwgintermediadora.com.br/solicitar-acesso
+          </a>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <form id="leadForm" novalidate class="rounded-2xl border border-navy/10 shadow-soft p-8 space-y-5 bg-white">
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label for="nome" class="block text-sm font-medium text-navy mb-1.5">Nome</label>
+              <input id="nome" name="nome" type="text" required class="w-full rounded-lg border border-navy/15 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition" placeholder="Seu nome" />
             </div>
             <div>
-              <label for="mensagem" class="block text-sm font-medium text-navy mb-1.5">Mensagem</label>
-              <textarea id="mensagem" name="mensagem" rows="4"
-                        class="w-full rounded-xl border border-navy/15 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition" placeholder="Conte o contexto do seu caso ou operação."></textarea>
+              <label for="email" class="block text-sm font-medium text-navy mb-1.5">E-mail institucional</label>
+              <input id="email" name="email" type="email" required class="w-full rounded-lg border border-navy/15 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition" placeholder="voce@orgao.gov.br" />
             </div>
-
-            <!-- mensagem de erro/sucesso -->
-            <p id="formMsg" class="hidden text-sm rounded-xl px-4 py-3"></p>
-
-            <button type="submit"
-                    class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-navy px-6 py-4 font-semibold text-white shadow-soft hover:bg-teal transition-colors">
-              Enviar solicitação
-              <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.926A1.5 1.5 0 005.135 9.25h6.115a.75.75 0 010 1.5H5.135a1.5 1.5 0 00-1.442 1.085l-1.414 4.926a.75.75 0 00.826.95 28.897 28.897 0 0015.293-7.155.75.75 0 000-1.113A28.897 28.897 0 003.105 2.289z"/></svg>
-            </button>
-            <p class="text-xs text-slatey text-center">Ao enviar, seu programa de e-mail abrirá com a mensagem pronta para você confirmar o envio.</p>
-          </form>
-        </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label for="orgao" class="block text-sm font-medium text-navy mb-1.5">Órgão / Instituição</label>
+              <input id="orgao" name="orgao" type="text" class="w-full rounded-lg border border-navy/15 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition" placeholder="Secretaria, procuradoria..." />
+            </div>
+            <div>
+              <label for="cargo" class="block text-sm font-medium text-navy mb-1.5">Cargo</label>
+              <input id="cargo" name="cargo" type="text" class="w-full rounded-lg border border-navy/15 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition" placeholder="Sua função" />
+            </div>
+          </div>
+          <div>
+            <label for="mensagem" class="block text-sm font-medium text-navy mb-1.5">Mensagem</label>
+            <textarea id="mensagem" name="mensagem" rows="4" class="w-full rounded-lg border border-navy/15 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal focus:border-teal transition" placeholder="Conte o contexto do seu caso ou operação."></textarea>
+          </div>
+          <p id="formMsg" class="hidden text-sm rounded-lg px-4 py-3"></p>
+          <button type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-navy px-6 py-4 font-semibold text-white hover:bg-teal transition-colors">
+            Enviar solicitação
+            <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.926A1.5 1.5 0 005.135 9.25h6.115a.75.75 0 010 1.5H5.135a1.5 1.5 0 00-1.442 1.085l-1.414 4.926a.75.75 0 00.826.95 28.897 28.897 0 0015.293-7.155.75.75 0 000-1.113A28.897 28.897 0 003.105 2.289z"/></svg>
+          </button>
+          <p class="text-xs text-slatey text-center">Ao enviar, seu programa de e-mail abrirá com a mensagem pronta para confirmar o envio.</p>
+        </form>
       </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       RODAPÉ
-  ====================================================================== -->
+  <!-- ============ RODAPÉ ============ -->
   <footer class="bg-ink text-white/70">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-16">
+    <div class="max-w-8xl mx-auto px-6 lg:px-10 py-16">
       <div class="grid md:grid-cols-4 gap-10">
-        <!-- Marca -->
         <div class="md:col-span-2">
           <div class="flex items-center gap-3">
-            <span class="grid place-items-center w-10 h-10 rounded-xl bg-gradient-to-br from-teal to-navy2 text-white font-display font-extrabold text-lg">P</span>
+            <span class="grid place-items-center w-10 h-10 rounded-lg bg-gradient-to-br from-teal to-navy2 text-white font-display font-extrabold text-lg">P</span>
             <span class="font-display font-extrabold text-lg text-white">PWG <span class="text-teal">Intermediadora</span></span>
           </div>
           <p class="mt-5 max-w-md leading-relaxed text-sm">
             Rastreabilidade, conformidade e proteção do paciente no fornecimento de medicamento de
-            alto custo judicializado. Um sistema próprio, na linguagem do SUS — sem depender de
-            acesso aos sistemas de governo.
+            alto custo judicializado. Um sistema próprio, na linguagem do SUS, sem depender de acesso
+            aos sistemas de governo.
           </p>
           <div class="mt-6 flex items-center gap-3">
-            <!-- redes sociais (substituir os href pelas URLs reais) -->
-            <a href="#" aria-label="LinkedIn" class="grid place-items-center w-10 h-10 rounded-xl bg-white/5 hover:bg-teal hover:text-ink transition">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.05c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.78 2.65 4.78 6.1V24h-4v-7.1c0-1.7-.03-3.9-2.38-3.9-2.38 0-2.75 1.86-2.75 3.78V24h-4V8z"/></svg>
-            </a>
-            <a href="#" aria-label="Instagram" class="grid place-items-center w-10 h-10 rounded-xl bg-white/5 hover:bg-teal hover:text-ink transition">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 01-1.38-.9 3.7 3.7 0 01-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.21 8.8 2.2 12 2.2zm0 1.8c-3.15 0-3.5.01-4.74.07-.9.04-1.38.19-1.71.32-.43.17-.74.37-1.06.69-.32.32-.52.63-.69 1.06-.13.33-.28.81-.32 1.71C3.21 8.5 3.2 8.85 3.2 12s.01 3.5.07 4.74c.04.9.19 1.38.32 1.71.17.43.37.74.69 1.06.32.32.63.52 1.06.69.33.13.81.28 1.71.32 1.24.06 1.59.07 4.74.07s3.5-.01 4.74-.07c.9-.04 1.38-.19 1.71-.32.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.06.13-.33.28-.81.32-1.71.06-1.24.07-1.59.07-4.74s-.01-3.5-.07-4.74c-.04-.9-.19-1.38-.32-1.71a2.86 2.86 0 00-.69-1.06 2.86 2.86 0 00-1.06-.69c-.33-.13-.81-.28-1.71-.32C15.5 4.01 15.15 4 12 4zm0 3.06A4.94 4.94 0 1012 17a4.94 4.94 0 000-9.88zm0 8.14A3.2 3.2 0 1112 8.8a3.2 3.2 0 010 6.4zm6.28-8.34a1.15 1.15 0 11-2.3 0 1.15 1.15 0 012.3 0z"/></svg>
-            </a>
+            <a href="#" aria-label="LinkedIn" class="grid place-items-center w-10 h-10 rounded-lg bg-white/5 hover:bg-teal hover:text-ink transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.05c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.78 2.65 4.78 6.1V24h-4v-7.1c0-1.7-.03-3.9-2.38-3.9-2.38 0-2.75 1.86-2.75 3.78V24h-4V8z"/></svg></a>
+            <a href="#" aria-label="Instagram" class="grid place-items-center w-10 h-10 rounded-lg bg-white/5 hover:bg-teal hover:text-ink transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg></a>
           </div>
         </div>
-
-        <!-- Navegação -->
         <div>
-          <h4 class="text-white font-semibold text-sm mb-4">Plataforma</h4>
+          <h4 class="text-white font-semibold text-sm mb-4">Navegação</h4>
           <ul class="space-y-3 text-sm">
-            <li><a href="#plataforma" class="hover:text-teal transition-colors">A Plataforma</a></li>
-            <li><a href="#como-funciona" class="hover:text-teal transition-colors">Como funciona</a></li>
-            <li><a href="#seguranca" class="hover:text-teal transition-colors">Segurança &amp; LGPD</a></li>
-            <li><a href="#conformidade" class="hover:text-teal transition-colors">Conformidade</a></li>
+            <li><a href="#atuacao" class="hover:text-teal transition-colors">O que fazemos</a></li>
+            <li><a href="#plataforma" class="hover:text-teal transition-colors">A plataforma</a></li>
+            <li><a href="#profissionais" class="hover:text-teal transition-colors">Para profissionais</a></li>
+            <li><a href="#consorcio" class="hover:text-teal transition-colors">O consórcio</a></li>
           </ul>
         </div>
-
-        <!-- Consórcio -->
         <div>
-          <h4 class="text-white font-semibold text-sm mb-4">O consórcio</h4>
+          <h4 class="text-white font-semibold text-sm mb-4">Acesso</h4>
           <ul class="space-y-3 text-sm">
-            <li>Pharmedical <span class="block text-xs text-white/40">Intermediação e operação</span></li>
-            <li>Waldhelm Moura <span class="block text-xs text-white/40">Jurídico / direito público</span></li>
-            <li>G3 Health Service <span class="block text-xs text-white/40">Relacionamento comercial</span></li>
+            <li><a href="https://app.pwgintermediadora.com.br/solicitar-acesso" class="hover:text-teal transition-colors">Acessar a plataforma</a></li>
+            <li><a href="https://app.pwgintermediadora.com.br/solicitar-acesso" class="hover:text-teal transition-colors">Solicitar acesso</a></li>
+            <li><a href="mailto:g3.representante@gmail.com" class="hover:text-teal transition-colors">g3.representante@gmail.com</a></li>
           </ul>
         </div>
       </div>
-
       <div class="mt-14 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/45">
-        <p>© <span id="year">2026</span> PWG Intermediadora. Todos os direitos reservados.</p>
+        <p>© <span id="year">2026</span> PWG Intermediadora · Pharmedical · Waldhelm Moura · G3 Health Service.</p>
         <p>Tratamento de dados conforme a LGPD (Lei 13.709/2018) · Município controlador, Pharmedical operadora.</p>
       </div>
     </div>
   </footer>
 
-  <!-- =====================================================================
-       JAVASCRIPT — interações
-  ====================================================================== -->
-  <script>
-    // 1) Header: sombra/fundo ao rolar
-    const header = document.getElementById('header');
-    const onScroll = () => {
-      if (window.scrollY > 12) {
-        header.classList.add('bg-white/90', 'backdrop-blur', 'shadow-soft');
-      } else {
-        header.classList.remove('bg-white/90', 'backdrop-blur', 'shadow-soft');
-      }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+  <!-- Créditos de imagem: fotografias de domínio público (CC0/PDM) via Openverse. -->
 
-    // 2) Menu mobile (abre/fecha)
+  <script>
+    // Header: sombra ao rolar
+    const header = document.getElementById('header');
+    const onScroll = () => header.classList.toggle('shadow-soft', window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+    // Menu mobile
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     const iconOpen = document.getElementById('menuIconOpen');
     const iconClose = document.getElementById('menuIconClose');
     const toggleMenu = (force) => {
-      const willOpen = force !== undefined ? force : mobileMenu.classList.contains('hidden');
-      mobileMenu.classList.toggle('hidden', !willOpen);
-      iconOpen.classList.toggle('hidden', willOpen);
-      iconClose.classList.toggle('hidden', !willOpen);
-      menuBtn.setAttribute('aria-expanded', String(willOpen));
+      const open = force !== undefined ? force : mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden', !open);
+      iconOpen.classList.toggle('hidden', open);
+      iconClose.classList.toggle('hidden', !open);
+      menuBtn.setAttribute('aria-expanded', String(open));
     };
     menuBtn.addEventListener('click', () => toggleMenu());
-    // fecha o menu ao clicar num link
     mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
 
-    // 3) Animação de entrada ao rolar (IntersectionObserver)
+    // Reveal on scroll
     const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-    // 4) Ano corrente no rodapé
+    // Ano
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // 5) Formulário: validação + envio via mailto (funcional sem backend)
+    // Formulário via mailto
     const form = document.getElementById('leadForm');
     const formMsg = document.getElementById('formMsg');
-    const showMsg = (text, ok) => {
-      formMsg.textContent = text;
-      formMsg.className = 'text-sm rounded-xl px-4 py-3 ' +
-        (ok ? 'bg-teal/10 text-tealDk' : 'bg-red-50 text-red-600');
-    };
+    const showMsg = (t, ok) => { formMsg.textContent = t; formMsg.className = 'text-sm rounded-lg px-4 py-3 ' + (ok ? 'bg-teal/10 text-tealDk' : 'bg-red-50 text-red-600'); };
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const nome = form.nome.value.trim();
-      const email = form.email.value.trim();
-      const orgao = form.orgao.value.trim();
-      const cargo = form.cargo.value.trim();
-      const mensagem = form.mensagem.value.trim();
-
-      // validação simples
-      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      if (!nome || !emailOk) {
-        showMsg('Preencha o nome e um e-mail válido para continuar.', false);
-        return;
-      }
-
-      // monta o corpo do e-mail
-      const corpo =
-        `Nome: ${nome}\n` +
-        `E-mail: ${email}\n` +
-        `Órgão/Instituição: ${orgao || '—'}\n` +
-        `Cargo: ${cargo || '—'}\n\n` +
-        `Mensagem:\n${mensagem || '—'}`;
-      const link = 'mailto:g3.representante@gmail.com'
-        + '?subject=' + encodeURIComponent('Contato pelo site — PWG Intermediadora')
-        + '&body=' + encodeURIComponent(corpo);
-
+      const nome = form.nome.value.trim(), email = form.email.value.trim();
+      const orgao = form.orgao.value.trim(), cargo = form.cargo.value.trim(), mensagem = form.mensagem.value.trim();
+      if (!nome || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showMsg('Preencha o nome e um e-mail válido para continuar.', false); return; }
+      const corpo = `Nome: ${nome}\nE-mail: ${email}\nÓrgão/Instituição: ${orgao || '—'}\nCargo: ${cargo || '—'}\n\nMensagem:\n${mensagem || '—'}`;
+      const link = 'mailto:g3.representante@gmail.com?subject=' + encodeURIComponent('Contato pelo site — PWG Intermediadora') + '&body=' + encodeURIComponent(corpo);
       showMsg('Obrigado, ' + nome.split(' ')[0] + '! Abrindo seu e-mail para confirmar o envio…', true);
       window.location.href = link;
     });
